@@ -22,6 +22,7 @@ async function createMany(collection: CollectionSlug, data: () => Record<string,
           .create({
             collection,
             data: data(),
+            overrideAccess: true,
           })
           .catch((error: Error & { code?: number }) => {
             failures.push(error.code ? `${error.code} ${error.message}` : error.message)
@@ -51,6 +52,7 @@ describe(
         data: {
           site: 'a',
         },
+        overrideAccess: true,
       })
       const tags = await Promise.all(
         ['a', 'b', 'c', 'd', 'e'].map((name) =>
@@ -59,6 +61,7 @@ describe(
             data: {
               name,
             },
+            overrideAccess: true,
           }),
         ),
       )
@@ -76,6 +79,7 @@ describe(
         await payload.delete({
           collection,
           where: {},
+          overrideAccess: true,
         })
       }
       await payload.destroy()

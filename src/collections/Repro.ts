@@ -9,6 +9,8 @@ export const Settings: CollectionConfig = {
       index: true,
     },
   ],
+  versions: false,
+  authorship: false,
 }
 
 const findSettings =
@@ -25,6 +27,7 @@ const findSettings =
       pagination,
       depth: 0,
       req,
+      overrideAccess: true,
     })
     return data
   }
@@ -41,6 +44,8 @@ export const Orders: CollectionConfig = {
       type: 'text',
     },
   ],
+  versions: false,
+  authorship: false,
 }
 
 // Control: the same hook without the count query.
@@ -55,6 +60,8 @@ export const OrdersUnpaginated: CollectionConfig = {
       type: 'text',
     },
   ],
+  versions: false,
+  authorship: false,
 }
 
 export const Tags: CollectionConfig = {
@@ -65,6 +72,8 @@ export const Tags: CollectionConfig = {
       type: 'text',
     },
   ],
+  versions: false,
+  authorship: false,
 }
 
 // Source 2: each array row validates its filterOptions with its own find, all rows in parallel.
@@ -88,4 +97,6 @@ export const Posts: CollectionConfig = {
       ],
     },
   ],
+  versions: false,
+  authorship: false,
 }

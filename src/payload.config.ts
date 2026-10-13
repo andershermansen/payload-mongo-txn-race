@@ -8,6 +8,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Orders, OrdersUnpaginated, Posts, Settings, Tags } from './collections/Repro'
+import { sharpTransformer } from '@payloadcms/transformer-sharp'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,6 +29,6 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || '',
   }),
-  sharp,
   plugins: [],
+  upload: { transformers: [sharpTransformer({ sharp })] },
 })
