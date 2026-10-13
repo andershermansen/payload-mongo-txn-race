@@ -1,3 +1,29 @@
+# Repro: MongoDB NoSuchTransaction (251) on create
+
+Concurrent commands sent as the first commands of a new transaction fail with `NoSuchTransaction`, because only one of
+them carries `startTransaction: true`. Needs a replica set; reproduced against MongoDB
+Atlas.
+
+```sh
+cp .env.example .env   # set DATABASE_URL to an Atlas connection string
+pnpm install
+pnpm test:int
+```
+
+`ITERATIONS` (default 100) and `CONCURRENCY` (default 1, one create at a time) tune the run, e.g. `ITERATIONS=500 pnpm test:int`.
+
+The test in `tests/int/transaction-race.int.spec.ts` creates documents in three collections from
+`src/collections/Repro.ts`:
+
+- `orders`: a `beforeChange` hook runs a paginated, filtered `find` with `req`. mongoose-paginate-v2 sends the count
+  and the docs query together. Expected to fail some of the time with code 251.
+- `orders-unpaginated`: the same hook with `pagination: false`, so a single query. Expected to pass.
+- `posts`: an array of relationships with static `filterOptions`. Every row's validation runs a find, all rows in
+  parallel. Expected to fail some of the time with a false "invalid relationship" ValidationError, with the 251 error
+  logged as `Error validating filter options for collection tags`.
+
+---
+
 # Payload Blank Template
 
 This template comes configured with the bare minimum to get started on anything you need.

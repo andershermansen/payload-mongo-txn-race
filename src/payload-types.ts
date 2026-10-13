@@ -69,6 +69,11 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    settings: Setting;
+    orders: Order;
+    'orders-unpaginated': OrdersUnpaginated;
+    tags: Tag;
+    posts: Post;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +83,11 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    settings: SettingsSelect<false> | SettingsSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
+    'orders-unpaginated': OrdersUnpaginatedSelect<false> | OrdersUnpaginatedSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -130,6 +140,7 @@ export interface User {
   resetPasswordExpiration?: string | null;
   salt?: string | null;
   hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
   sessions?:
@@ -163,6 +174,61 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings".
+ */
+export interface Setting {
+  id: string;
+  site?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: string;
+  site?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders-unpaginated".
+ */
+export interface OrdersUnpaginated {
+  id: string;
+  site?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: string;
+  name?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: string;
+  rows?:
+    | {
+        tag?: (string | null) | Tag;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -192,6 +258,26 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'settings';
+        value: string | Setting;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: string | Order;
+      } | null)
+    | ({
+        relationTo: 'orders-unpaginated';
+        value: string | OrdersUnpaginated;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: string | Tag;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: string | Post;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -247,6 +333,7 @@ export interface UsersSelect<T extends boolean = true> {
   resetPasswordExpiration?: T;
   salt?: T;
   hash?: T;
+  resetPasswordRequestedAt?: T;
   loginAttempts?: T;
   lockUntil?: T;
   sessions?:
@@ -274,6 +361,56 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings_select".
+ */
+export interface SettingsSelect<T extends boolean = true> {
+  site?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  site?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders-unpaginated_select".
+ */
+export interface OrdersUnpaginatedSelect<T extends boolean = true> {
+  site?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  rows?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
